@@ -2,16 +2,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import styles from "../styles/Home.module.css";
-
-interface InsuranceProduct {
-  product_id: string;
-  product_name: string;
-  effective_date: string;
-  termination_date: string;
-  benefits_summary: string;
-  claim_system_config: string;
-}
 
 const Home: NextPage = () => {
   const [products, setProducts] = useState<InsuranceProduct[]>([]);
@@ -64,81 +54,83 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className="min-h-screen p-8">
       <Head>
         <title>Insurance Products</title>
         <meta name="description" content="Insurance Products List" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Insurance Products</h1>
-
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <input
-            type="text"
-            placeholder="Product ID"
-            value={newProduct.product_id}
-            onChange={(e) => setNewProduct({...newProduct, product_id: e.target.value})}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Product Name"
-            value={newProduct.product_name}
-            onChange={(e) => setNewProduct({...newProduct, product_name: e.target.value})}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Effective Date"
-            value={newProduct.effective_date}
-            onChange={(e) => setNewProduct({...newProduct, effective_date: e.target.value})}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Termination Date"
-            value={newProduct.termination_date}
-            onChange={(e) => setNewProduct({...newProduct, termination_date: e.target.value})}
-            required
-          />
-          <textarea
-            placeholder="Benefits Summary"
-            value={newProduct.benefits_summary}
-            onChange={(e) => setNewProduct({...newProduct, benefits_summary: e.target.value})}
-            required
-          />
-          <textarea
-            placeholder="Claim System Config"
-            value={newProduct.claim_system_config}
-            onChange={(e) => setNewProduct({...newProduct, claim_system_config: e.target.value})}
-            required
-          />
-          <button type="submit">Add Product</button>
+      <main className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-8 text-center">Insurance Products</h1>
+        
+        <form onSubmit={handleSubmit} className="space-y-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              placeholder="Product ID"
+              value={newProduct.product_id}
+              onChange={(e) => setNewProduct({...newProduct, product_id: e.target.value})}
+              className="p-2 border rounded"
+            />
+            <input
+              type="text"
+              placeholder="Product Name"
+              value={newProduct.product_name}
+              onChange={(e) => setNewProduct({...newProduct, product_name: e.target.value})}
+              className="p-2 border rounded"
+            />
+            <input
+              type="date"
+              value={newProduct.effective_date}
+              onChange={(e) => setNewProduct({...newProduct, effective_date: e.target.value})}
+              className="p-2 border rounded"
+            />
+            <input
+              type="date"
+              value={newProduct.termination_date}
+              onChange={(e) => setNewProduct({...newProduct, termination_date: e.target.value})}
+              className="p-2 border rounded"
+            />
+            <textarea
+              placeholder="Benefits Summary"
+              value={newProduct.benefits_summary}
+              onChange={(e) => setNewProduct({...newProduct, benefits_summary: e.target.value})}
+              className="p-2 border rounded col-span-2"
+            />
+            <textarea
+              placeholder="Claim System Config"
+              value={newProduct.claim_system_config}
+              onChange={(e) => setNewProduct({...newProduct, claim_system_config: e.target.value})}
+              className="p-2 border rounded col-span-2"
+            />
+          </div>
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+            Add Product
+          </button>
         </form>
 
-        <div className={styles.table}>
-          <table>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border">
             <thead>
-              <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Effective Date</th>
-                <th>Termination Date</th>
-                <th>Benefits Summary</th>
-                <th>Claim System Config</th>
+              <tr className="bg-gray-100">
+                <th className="border p-2">ID</th>
+                <th className="border p-2">Name</th>
+                <th className="border p-2">Effective Date</th>
+                <th className="border p-2">Termination Date</th>
+                <th className="border p-2">Benefits</th>
+                <th className="border p-2">Config</th>
               </tr>
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr key={product.product_id}>
-                  <td>{product.product_id}</td>
-                  <td>{product.product_name}</td>
-                  <td>{product.effective_date}</td>
-                  <td>{product.termination_date}</td>
-                  <td>{product.benefits_summary}</td>
-                  <td>{product.claim_system_config}</td>
+                <tr key={product.product_id} className="hover:bg-gray-50">
+                  <td className="border p-2">{product.product_id}</td>
+                  <td className="border p-2">{product.product_name}</td>
+                  <td className="border p-2">{product.effective_date}</td>
+                  <td className="border p-2">{product.termination_date}</td>
+                  <td className="border p-2">{product.benefits_summary}</td>
+                  <td className="border p-2">{product.claim_system_config}</td>
                 </tr>
               ))}
             </tbody>
