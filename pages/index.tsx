@@ -15,14 +15,53 @@ interface InsuranceProduct {
 
 const Home: NextPage = () => {
   const [products, setProducts] = useState<InsuranceProduct[]>([]);
+  const [newProduct, setNewProduct] = useState({
+    product_id: '',
+    product_name: '',
+    effective_date: '',
+    termination_date: '',
+    benefits_summary: '',
+    claim_system_config: ''
+  });
 
-  useEffect(() => {
-    fetch('/api/createTable')
-      .then(() => fetch('/api/products'))
+  const fetchProducts = () => {
+    fetch('/api/products')
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(error => console.error('Error:', error));
+  };
+
+  useEffect(() => {
+    fetch('/api/createTable')
+      .then(fetchProducts)
+      .catch(error => console.error('Error:', error));
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/addProduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newProduct),
+      });
+      if (res.ok) {
+        setNewProduct({
+          product_id: '',
+          product_name: '',
+          effective_date: '',
+          termination_date: '',
+          benefits_summary: '',
+          claim_system_config: ''
+        });
+        fetchProducts();
+      }
+    } catch (error) {
+      console.error('Error adding product:', error);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -34,6 +73,50 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Insurance Products</h1>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <input
+            type="text"
+            placeholder="Product ID"
+            value={newProduct.product_id}
+            onChange={(e) => setNewProduct({...newProduct, product_id: e.target.value})}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Product Name"
+            value={newProduct.product_name}
+            onChange={(e) => setNewProduct({...newProduct, product_name: e.target.value})}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Effective Date"
+            value={newProduct.effective_date}
+            onChange={(e) => setNewProduct({...newProduct, effective_date: e.target.value})}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Termination Date"
+            value={newProduct.termination_date}
+            onChange={(e) => setNewProduct({...newProduct, termination_date: e.target.value})}
+            required
+          />
+          <textarea
+            placeholder="Benefits Summary"
+            value={newProduct.benefits_summary}
+            onChange={(e) => setNewProduct({...newProduct, benefits_summary: e.target.value})}
+            required
+          />
+          <textarea
+            placeholder="Claim System Config"
+            value={newProduct.claim_system_config}
+            onChange={(e) => setNewProduct({...newProduct, claim_system_config: e.target.value})}
+            required
+          />
+          <button type="submit">Add Product</button>
+        </form>
 
         <div className={styles.table}>
           <table>
